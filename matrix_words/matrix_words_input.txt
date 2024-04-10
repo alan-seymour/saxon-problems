@@ -1,6 +1,4 @@
-abcde
-fghij
-klmno
-pqrst
-uvwxy
-mrx
+ABCE
+SFCS
+ADEE
+SEE
