@@ -3,13 +3,33 @@ type Coord = {
   col: number;
 };
 
-const matrix: string[][] = [];
+type Test = {
+  matrix: string[][];
+  searchTerm: string[];
+};
+
+const lines: string[] = [];
 
 for await (const line of console) {
-  matrix.push(line.trim().split(""));
+  lines.unshift(line);
 }
 
-const searchTerm = matrix.pop() ?? [];
+const testCaseCount = Number(lines.pop());
+
+const tests: Test[] = [];
+
+for (let i = 0; i < testCaseCount; i++) {
+  const rows = Number(lines.pop()?.split(" ")[0]);
+  const matrix: string[][] = [];
+
+  for (let j = 0; j < rows; j++) {
+    matrix.push((lines.pop() ?? "").split(""));
+  }
+
+  const searchTerm = (lines.pop() ?? "").split("");
+
+  tests.push({ searchTerm, matrix });
+}
 
 const stringifyCoord = ({ row, col }: Coord) => `${row}:${col}`;
 
@@ -37,7 +57,7 @@ const findStarts = (matrix: string[][], startLetter: string): Coord[] => {
   const starts: Coord[] = [];
   matrix.forEach((r, row) =>
     r.forEach((cell, col) => {
-      if (cell === searchTerm[0]) {
+      if (cell === startLetter) {
         starts.push({ row, col });
       }
     })
@@ -71,6 +91,7 @@ const search = (matrix: string[][], searchTerm: string[]) =>
     recursiveTest(matrix, searchTerm.slice(1), start!, [stringifyCoord(start!)])
   );
 
-const result = search(matrix, searchTerm);
-
-console.log(result ? "Found!" : "Not Found!");
+tests.forEach(({ matrix, searchTerm }) => {
+  const result = search(matrix, searchTerm);
+  console.log(result ? "Found!" : "Not Found!");
+});
